@@ -22,7 +22,7 @@ app2 consumes the output of app1 and reverse the String values of the key.
 
 To Dockorise the apps.
 sudo docker build -t app1:latest app1/.
-sudo docker build -t app2:latest /. 
+sudo docker build -t app2:latest app2/. 
  
 At this point we have build our image.
 we can these image and test the api at this point.
