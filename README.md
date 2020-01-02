@@ -21,7 +21,7 @@ app1 just returns the json on port 8080.
 app2 consumes the output of app1 and reverse the String values of the key.
 
 To Dockorise the apps.
-sudo ocker build -t app1:latest app1/.
+sudo docker build -t app1:latest app1/.
 sudo docker build -t app2:latest /. 
  
 At this point we have build our image.
