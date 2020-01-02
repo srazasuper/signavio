@@ -1,37 +1,55 @@
+**PRE-REQs.**
 Install Docker.
 Install minikube.
+python3
+python3-pip
+Sudo-user with password less access to root
 
-App1:
-cd to app1 directory and run.
-docker build -t app1:latest .
-to run in docker.
-sudo docker run -v $(pwd)/sample.json:/app/sample.json -d --name app1 -p 8080:8080 app1
+**Automated through deployement script**
+```
+after cloning the directory.
+cd signavio.
+chmod +x deployer.sh
+bash -x deployer.sh
+```
 
+**Description**
+```
+There are 2 Directories in the Signavio.
+app1 and app2.
+app1 just returns the json on port 8080.
+app2 consumes the output of app1 and reverse the String values of the key.
 
-APP2:
-go to app2 Directory and run.
-docker build -t app2:latest .
+To Dockorise the apps.
+sudo ocker build -t app1:latest app1/.
+sudo docker build -t app2:latest /. 
+ 
+At this point we have build our image.
+we can these image and test the api at this point.
+````
 
-To run in docker.
-sudo docker run -d --name app2 --link=app1 -p 9090:9090 app2
-
-Lets get to Mini kube.
-create deployement file like in the root directory.
-run kubectl apply -f apps.yaml
-now from cli.
-sudo kubectl get service
+**deploy on  Kuberenetes**
+```
+we have define the deployement,Replicas, Exposed Service so we just have to apply in kubernetes.
+# sudo kubectl apply -f apps.yaml
+ This will create service named app1-service and app2-service.
+to test this you need to get the IP and  port of each expose service.
+# sudo kubectl get service
 NAME           TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-app1-service   LoadBalancer   10.96.185.132   <pending>     8080:30791/TCP   13s
-app2-service   LoadBalancer   10.96.119.44    <pending>     9090:31969/TCP   13s
-kubernetes     ClusterIP      10.96.0.1       <none>        443/TCP          67m
+app1-service   LoadBalancer   10.96.247.190   <pending>     8080:30642/TCP   88m
+app2-service   LoadBalancer   10.96.190.1     <pending>     9090:32082/TCP   88m
+kubernetes     ClusterIP      10.96.0.1       <none>        443/TCP          2d20h
 
-TESTING:
-1) curl http://10.96.185.132:8080
+Now we have running app1-service on "10.96.247.190" on port 8080
+and app2-service on 10.96.190.1 port 9090
+
+Just use curl command to see the result.
+curl http://10.96.247.190:8080
 {
 "id": "1",
 "message": "Hello world"
 }
-
-
-2) curl http://10.96.119.44:9090
+ubuntu@ip-172-31-39-79:~/signavio$ curl http://10.96.190.1:9090
 {"id":"1","message":"dlrow olleH"}
+
+```
